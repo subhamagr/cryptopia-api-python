@@ -46,8 +46,8 @@ class Api(object):
             return (result, error)
         elif feature_requested in self.public:
             url = "https://www.cryptopia.co.nz/Api/" + feature_requested + "/" + \
-                  '/'.join(i for i in get_parameters.values()
-                           ) if get_parameters != None else ""
+                  ('/'.join(i for i in get_parameters.values()
+                           ) if get_parameters is not None else "")
             req = requests.get(url, params=get_parameters)
             if req.status_code != 200:
                 try:
