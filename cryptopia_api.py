@@ -34,15 +34,12 @@ class Api(object):
                 except requests.exceptions.RequestException as ex:
                     return None, "Status Code : " + str(ex)
             req = req.json()
-            if req['Success'] is True:
+            if 'Success' in req and req['Success'] is True:
                 result = req['Data']
                 error = None
             else:
                 result = None
-                if req['Message'] is None:
-                    error = "Unknown response error"
-                else:
-                    error = req['Message']
+                error = req['Error'] if 'Error' in req else 'Unknown Error'
             return (result, error)
         elif feature_requested in self.public:
             url = "https://www.cryptopia.co.nz/Api/" + feature_requested + "/" + \
@@ -55,15 +52,12 @@ class Api(object):
                 except requests.exceptions.RequestException as ex:
                     return None, "Status Code : " + str(ex)
             req = req.json()
-            if req['Success'] is True:
+            if 'Success' in req and req['Success'] is True:
                 result = req['Data']
                 error = None
             else:
                 result = None
-                if req['Message'] is None:
-                    error = "Unknown response error"
-                else:
-                    error = req['Message']
+                error = req['Error'] if 'Error' in req else 'Unknown Error'
             return (result, error)
         else:
             return None, "Unknown feature"
