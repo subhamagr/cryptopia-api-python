@@ -172,6 +172,8 @@ class Api(object):
         md5.update(post_data.encode('utf-8'))
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
         signature = self.key + "POST" + urlparse(url).geturl().lower() + nonce + rcb64
-        sign = base64.b64encode(hmac.new(self.secret, signature.encode('utf-8'), hashlib.sha256).digest())
+        sign = base64.b64encode(hmac.new(self.secret, 
+                                         signature.encode('utf-8'), 
+                                         hashlib.sha256).digest())
         header_value = "amx " + self.key + ":" + sign.decode('utf-8') + ":" + nonce
         return {'Authorization': header_value, 'Content-Type': 'application/json; charset=utf-8'}
