@@ -8,7 +8,6 @@ except ImportError:
     from urlparse import urlparse
 
 #both
-import urllib
 import json
 import time
 import hmac
