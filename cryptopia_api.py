@@ -2,7 +2,7 @@
 
 try:
     #python3
-    from urllib.parse import urlparse
+    import urllib.parse as urlparse
 except ImportError:
     #python2
     from urlparse import urlparse
@@ -20,7 +20,7 @@ class Api(object):
 
     def __init__(self, key, secret):
         self.key = key
-        self.secret = base64.b64decode(secret + '=' * (-len(secret) % 4))
+        self.secret = secret
         self.public = ['GetCurrencies', 'GetTradePairs', 'GetMarkets',
                        'GetMarket', 'GetMarketHistory', 'GetMarketOrders', 'GetMarketOrderGroups']
         self.private = ['GetBalance', 'GetDepositAddress', 'GetOpenOrders',
@@ -40,7 +40,7 @@ class Api(object):
                     req.raise_for_status()
                 except requests.exceptions.RequestException as ex:
                     return None, "Status Code : " + str(ex)
-            req = req.json()
+            req = json.loads(req.content)
             if 'Success' in req and req['Success'] is True:
                 result = req['Data']
                 error = None
@@ -171,9 +171,9 @@ class Api(object):
         md5 = hashlib.md5()
         md5.update(post_data.encode('utf-8'))
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
-        signature = self.key + "POST" + urlparse(url).geturl().lower() + nonce + rcb64
-        sign = base64.b64encode(hmac.new(self.secret, 
-                                         signature.encode('utf-8'), 
-                                         hashlib.sha256).digest())
-        header_value = "amx " + self.key + ":" + sign.decode('utf-8') + ":" + nonce
+        signature = self.key + "POST" + urlparse.quote_plus(url).lower() + nonce + rcb64    # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
+        hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret)),
+                                                  signature.encode('utf-8'),
+                                                  hashlib.sha256).digest())
+        header_value = "amx " + self.key + ":" + hmacsignature.decode('utf-8') + ":" + nonce
         return {'Authorization': header_value, 'Content-Type': 'application/json; charset=utf-8'}
