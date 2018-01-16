@@ -17,7 +17,7 @@ like this:
 
 ``` javascript
 {
-    "public" : "YOUR_PUBLIC_KEY",
+    "key" : "YOUR_PUBLIC_KEY",
     "secret" : "YOUR_PRIVATE_KEY"
 }
 ```
