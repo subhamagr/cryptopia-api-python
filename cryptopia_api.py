@@ -171,7 +171,7 @@ class Api(object):
         md5 = hashlib.md5()
         md5.update(post_data.encode('utf-8'))
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
-        signature = self.key + "POST" + urlparse.quote_plus(url).lower() + nonce + rcb64    # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
+        signature = self.key + "POST" + urlparse.quote(url).lower() + nonce + rcb64    # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
         hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret)),
                                                   signature.encode('utf-8'),
                                                   hashlib.sha256).digest())
