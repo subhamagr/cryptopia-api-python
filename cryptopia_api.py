@@ -1,19 +1,14 @@
 """ This is a wrapper for Cryptopia.co.nz API """
 
-try:
-    #python3
-    import urllib.parse as urlparse
-except ImportError:
-    #python2
-    from urlparse import urlparse
 
-#both
 import json
 import time
 import hmac
 import hashlib
 import base64
 import requests
+
+from requests.compat import quote_plus
 
 class Api(object):
     """ Represents a wrapper for cryptopia API """
@@ -171,8 +166,8 @@ class Api(object):
         md5 = hashlib.md5()
         md5.update(post_data.encode('utf-8'))
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
-        # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
-        signature = self.key + "POST" + urlparse(url).geturl().lower() + nonce + rcb64
+        
+        signature = self.key + "POST" + quote_plus(url).lower() + nonce + rcb64
         hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret)),
                                                   signature.encode('utf-8'),
                                                   hashlib.sha256).digest())
