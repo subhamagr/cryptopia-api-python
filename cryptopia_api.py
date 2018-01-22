@@ -8,6 +8,7 @@ import hashlib
 import base64
 import requests
 
+# using requests.compat to wrap urlparse (python cross compatibility over 9000!!!)
 from requests.compat import quote_plus
 
 class Api(object):
