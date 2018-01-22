@@ -40,7 +40,7 @@ class Api(object):
                     req.raise_for_status()
                 except requests.exceptions.RequestException as ex:
                     return None, "Status Code : " + str(ex)
-            req = json.loads(req.content)
+            req = req.json()
             if 'Success' in req and req['Success'] is True:
                 result = req['Data']
                 error = None
@@ -171,7 +171,8 @@ class Api(object):
         md5 = hashlib.md5()
         md5.update(post_data.encode('utf-8'))
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
-        signature = self.key + "POST" + urlparse.quote(url).lower() + nonce + rcb64    # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
+        # 'urlparse' on Py3 is actually urllib.parse imported as, so it is retrocompatible
+        signature = self.key + "POST" + urlparse(url).geturl().lower() + nonce + rcb64
         hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret)),
                                                   signature.encode('utf-8'),
                                                   hashlib.sha256).digest())
