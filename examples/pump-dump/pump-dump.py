@@ -10,7 +10,8 @@ It is all dependent on the volume of the pump and how much you are intending to 
 Build up your profits gradually and do not be too greedy, else you can be caught holding
 the bag. Do proper preparation to know how much to use and where to set your buy/sell at!
 
-This program is for educational use only and is provided AS IS. Check the LICENSE file of this repository.
+This program is for educational use only and is provided AS IS. Check the LICENSE file of 
+this repository.
 """
 
 import json
@@ -170,9 +171,7 @@ while not EXIT_CYCLE:
 
     print '\nBrought To You By Crypto Crew Technologies - Happy Profits!'
 
-
     if __name__ == "__main__":
         ANSWER = raw_input("\nWould you like to restart the Trade Bot? (y/n) ").format(PUMP_COIN)
         if ANSWER.lower().strip() in "n no".split():
             EXIT_CYCLE = True
-            
