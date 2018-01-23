@@ -169,7 +169,7 @@ class Api(object):
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
         
         signature = self.key + "POST" + quote_plus(url).lower() + nonce + rcb64
-        hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret)),
+        hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret.strip())),
                                                   signature.encode('utf-8'),
                                                   hashlib.sha256).digest())
         header_value = "amx " + self.key + ":" + hmacsignature.decode('utf-8') + ":" + nonce

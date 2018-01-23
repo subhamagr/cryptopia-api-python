@@ -139,16 +139,18 @@ while not EXIT_CYCLE:
     print '\n[+] Placing sell order at {:.8f} (+{}%)...'.format(ASK_SELL, PUMP_SELL)
 
     if ALLOW_ORDERS:
-        COINS_OWNED, ERROR = API.get_balance(PUMP_COIN)[0]['Available']
+        COINS_OWNED, ERROR = API.get_balance(PUMP_COIN)
         if ERROR is not None:
             print ERROR
             break
+        COINS_OWNED = COINS_OWNED['Available']
         while COINS_OWNED == 0:
             time.sleep(0.1)
-            COINS_OWNED, ERROR = API.get_balance(PUMP_COIN)[0]['Available']
+            COINS_OWNED, ERROR = API.get_balance(PUMP_COIN)
             if ERROR is not None:
                 print ERROR
                 break
+            COINS_OWNED = COINS_OWNED['Available']
 
         TRADE, ERROR = API.submit_trade(PUMP_COIN + '/BTC', 'Sell', ASK_SELL, NUM_COINS)
         if ERROR is not None:
