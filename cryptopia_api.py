@@ -165,11 +165,12 @@ class Api(object):
         """ Creates secure header for cryptopia private api. """
         nonce = str(int(time.time()))
         md5 = hashlib.md5()
-        md5.update(post_data.encode('utf-8'))
+        jsonparams = json.dumps(post_data).encode('utf-8')
+        md5.update(jsonparams)
         rcb64 = base64.b64encode(md5.digest()).decode('utf-8')
         
         signature = self.key + "POST" + quote_plus(url).lower() + nonce + rcb64
-        hmacsignature = base64.b64encode(hmac.new(base64.b64decode(str(self.secret.strip())),
+        hmacsignature = base64.b64encode(hmac.new(base64.b64decode(self.secret),
                                                   signature.encode('utf-8'),
                                                   hashlib.sha256).digest())
         header_value = "amx " + self.key + ":" + hmacsignature.decode('utf-8') + ":" + nonce
